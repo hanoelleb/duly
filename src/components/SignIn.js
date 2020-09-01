@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import {Link} from 'react-router-dom';
 const SignIn = () => {
      
     const [username, setUsername] = useState('');
@@ -21,6 +21,7 @@ const SignIn = () => {
     }
 
     return (
+	<div>
         <form onSubmit={handleSubmit}>
 	    <h2>Sign in</h2>
 	    <input type='text' placeholder='Username' name='username' 
@@ -29,6 +30,9 @@ const SignIn = () => {
 	        value = {password} onChange={handlePassword} />
 	    <input type='submit' value='Sign in' />
 	</form>
+	<p>Not a registered user?
+	    <Link to='/sign-up'>Sign up!</Link></p>
+	</div>
     )
 }
 

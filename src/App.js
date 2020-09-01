@@ -3,7 +3,7 @@ import './App.css';
 import Home from './components/Home.js';
 import SignIn from './components/SignIn.js';
 import Notes from './components/Notes.js';
-
+import SignUp from './components/SignUp.js';
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 
 const Notenav = () => {
@@ -36,6 +36,10 @@ function App() {
 	       <Route path='/sign-in'>
                    <SignIn />
                </Route>
+
+	       <Route path='/sign-up'>
+	           <SignUp />
+	       </Route>
 	   </Switch>
 	</Router>
     </div>
