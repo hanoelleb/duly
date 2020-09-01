@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import Home from './components/Home.js';
+import SignIn from './components/SignIn.js';
+import Notes from './components/Notes.js';
 
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 
@@ -23,15 +26,15 @@ function App() {
 	   <Notenav />
 	   <Switch>
 	       <Route exact path='/'>
-	           <h1>Duly</h1>
+	           <Home />
 	       </Route>
 
 	       <Route path='/notes'>
-                   <h1>Notebooks</h1>
+                   <Notes />
                </Route>
 
 	       <Route path='/sign-in'>
-                   <h1>Sign in</h1>
+                   <SignIn />
                </Route>
 	   </Switch>
 	</Router>
