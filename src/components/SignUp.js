@@ -21,6 +21,23 @@ const SignUp = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        var url = 'http://localhost:5000/sign-up';
+
+        var data = { username: username, password: password };
+	console.log('data: ' + data);
+
+	fetch(url, {
+	    method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+	    body: JSON.stringify(data) })
+                .then(response => response.json())
+                .then( data => {
+                    console.log(data);
+                });
         console.log('submitted');
     }
 
@@ -41,7 +58,7 @@ const SignUp = () => {
 	    { username !== '' && 
 	      password !== '' && 
 	      password === confirmation ?
-                  <input type='submit' value='Sign in' /> 
+                  <input type='submit' value='Sign up' /> 
 		  :
 		  <input type='submit' value='Sign up' disabled />
 	    }

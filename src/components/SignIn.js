@@ -17,7 +17,26 @@ const SignIn = () => {
 
     function handleSubmit(e) {
 	e.preventDefault();
-        console.log('submitted');
+        var data = {
+	    username: username,
+            password: password
+	};
+        
+	var url = 'http://localhost:5000/sign-in';
+        var real = 'https://hanoelleb-blog-api.herokuapp.com/';
+	const response =
+            fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)})
+                .then(response => response.json())
+                .then( res => {
+		    localStorage.setItem('token', res.token);
+                    console.log(localStorage.getItem('token'));
+                });
     }
 
     return (
