@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+
+import { login } from '../reducers/auth-reducer';
+import { useDispatch } from 'react-redux';
+
 const SignIn = (props) => {
      
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const dispatch = useDispatch();
+
     function handleName(e) {
         setUsername(e.target.value);
-	console.log(username);
     }
 
     function handlePassword(e) {
-	console.log(e.target.value);
         setPassword(e.target.value);
     }
 
@@ -35,6 +39,7 @@ const SignIn = (props) => {
                 .then(response => response.json())
                 .then( res => {
 		    localStorage.setItem('token', res.token);
+		    dispatch(login(res.user, res.token));
                     console.log(localStorage.getItem('token'));
                 });
     }

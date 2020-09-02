@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Editor} from '@tinymce/tinymce-react';
+import { connect } from "react-redux";
 
 const Notes = () => {
     return (
@@ -49,10 +50,6 @@ class NoteForm extends React.Component {
                     <input type='text' placeholder='Topic' name='topic'
                         value={this.state.topic} onChange={this.handleChange}
                     />
-		    { /*<textarea placeholder='Your note...' name='content'
-                        value={this.state.content}
-                        onChange={this.handleChange}></textarea>
-		    */ }
 		    <Editor name='content'
                         initialValue="<p>Your notes...</p>"
 		        value = {this.state.content}
@@ -70,6 +67,7 @@ class NoteForm extends React.Component {
                        }}
                        onEditorChange={this.handleEditorChange}
                     />
+		    <input type='submit' value='Add note'></input>
                 </form>
             </div>
 	    )
@@ -88,4 +86,8 @@ class NoteList extends React.Component {
     }
 }
 
-export default Notes;
+const mapStateToProps = state => ({
+  notes: state.mainContainerData
+});
+
+export default connect(Notes);

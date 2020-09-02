@@ -5,15 +5,7 @@ import SignIn from './components/SignIn.js';
 import Notes from './components/Notes.js';
 import SignUp from './components/SignUp.js';
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
-import { createStore, combineReducers } from 'redux';
 
-import notesReducer from './reducers/notes-reducer';
-import authReducer from './reducers/auth-reducer';
-
-const reducer = combineReducers({  notes: notesReducer,  auth: authReducer})
-const store = createStore(reducer);
-
-console.log(store.getState())
 
 const Notenav = (props) => {
     return (
@@ -39,7 +31,7 @@ function App() {
   return (
     <div className="App">
 	<Router>
-	   <Notenav user={user} />
+	   <Notenav />
 	   <Switch>
 	       <Route exact path='/'>
 	           <Home />

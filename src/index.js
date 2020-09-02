@@ -4,10 +4,22 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux' 
+
+import notesReducer from './reducers/notes-reducer';
+import authReducer from './reducers/auth-reducer';
+
+const reducer = combineReducers({  notes: notesReducer,  auth: authReducer})
+const store = createStore(reducer);
+
+console.log(store);
+store.subscribe(() => console.log(store.getState()));
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
