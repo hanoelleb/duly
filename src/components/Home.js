@@ -8,7 +8,9 @@ const Home = () => {
         
 	    <p>Whether just simple reminders for yourself or 
 	    material for group study sessions, Duly can store it all.</p>
-	
+
+            <p>Create an account to save your notes!</p>
+
 	    <p>Make your own notebooks now!</p>
 	</div>
     )
