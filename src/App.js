@@ -6,16 +6,25 @@ import Notes from './components/Notes.js';
 import SignUp from './components/SignUp.js';
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 
+import {useSelector, useDispatch} from 'react-redux';
+
+import {logout} from './reducers/auth-reducer';
 
 const Notenav = (props) => {
+
+    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch()
+
     return (
     <div className='nav'>
         <ul>
             <li><Link to='/'>Home</Link></li>
             <li><Link to='/notes'>Notebooks</Link></li>
-	    { props.user != null ? 
-               <li>Sign out</li> :
-               <li><Link to='/sign-in'>Sign in</Link></li>
+	    { user ?
+                <li onClick={()=> dispatch(logout())}>Sign out</li> :
+                <li>
+		    <Link to='/sign-in'>Sign in</Link>
+		</li>
 	    }
         </ul>
     </div>

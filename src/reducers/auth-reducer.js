@@ -24,5 +24,11 @@ export const login = (user, token) => {
   }
 }
 
+export const logout = () => {
+  return {
+     type: 'LOGOUT'
+  }
+}
+
 export default authReducer;
 

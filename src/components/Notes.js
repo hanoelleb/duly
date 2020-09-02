@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Editor} from '@tinymce/tinymce-react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
 const Notes = () => {
     return (
     <div>
         <h1>Notes</h1>
-	<NoteForm />
+	<ConnectedForm />
 	<NoteList />
     </div>
     )
@@ -28,11 +28,12 @@ class NoteForm extends React.Component {
 
     handleEditorChange = (content, editor) => {
 	 this.setState( { content: content } );
-         console.log('Content was updated:', content);
     }
 
     handleSubmit(e) {
 	e.preventDefault();
+	//console.log('PROPS: ' + JSON.stringify(this.props));
+	console.log(this.props.user);
     }
 
     handleClick() {
@@ -86,8 +87,16 @@ class NoteList extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-  notes: state.mainContainerData
-});
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    user: state.auth.user,
+    token: state.auth.token,
+    notes: state.notes,
+  }
+}
 
-export default connect(Notes);
+//const mapDispatchToProps = {  toggleImportanceOf,}
+const ConnectedForm = connect(mapStateToProps)(NoteForm)
+
+export default Notes;
