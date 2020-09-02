@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 import { login } from '../reducers/auth-reducer';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ const SignIn = (props) => {
      
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [redirect, setRedirect] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -41,9 +42,12 @@ const SignIn = (props) => {
 		    localStorage.setItem('token', res.token);
 		    dispatch(login(res.user, res.token));
                     console.log(localStorage.getItem('token'));
+                    setRedirect(true);
                 });
     }
 
+    
+    if (redirect !== true) {
     return (
 	<div>
         <form onSubmit={handleSubmit}>
@@ -57,7 +61,9 @@ const SignIn = (props) => {
 	<p>Not a registered user?
 	    <Link to='/sign-up'>Sign up!</Link></p>
 	</div>
-    )
+      )
+    }
+    return <Redirect to='/notes' />
 }
 
 export default SignIn;

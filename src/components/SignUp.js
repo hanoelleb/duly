@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 const SignUp = () => {
 
@@ -8,6 +8,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmation, setConfirmation] = useState('');
     const [ready, setReady] = useState(false);
+    const [redirect, setRedirect] = useState(false);
 
     function handleName(e) {
         setUsername(e.target.value);
@@ -36,15 +37,15 @@ const SignUp = () => {
 	    body: JSON.stringify(data) })
                 .then(response => response.json())
                 .then( data => {
-                    console.log(data);
+                    setRedirect(true);
                 });
-        console.log('submitted');
     }
 
     function handleConfirmation(e) {
         setConfirmation(e.target.value);
     }
 
+    if (!redirect)
     return (
 	<div>
         <form onSubmit={handleSubmit}>
@@ -68,6 +69,7 @@ const SignUp = () => {
         </form>
 	</div>
     )
+    return <Redirect to='/sign-in' />
 }
 
 export default SignUp;
