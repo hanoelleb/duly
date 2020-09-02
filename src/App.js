@@ -1,18 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Home from './components/Home.js';
 import SignIn from './components/SignIn.js';
 import Notes from './components/Notes.js';
 import SignUp from './components/SignUp.js';
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
+import { createStore, combineReducers } from 'redux';
 
-const Notenav = () => {
+import notesReducer from './reducers/notes-reducer';
+import authReducer from './reducers/auth-reducer';
+
+const reducer = combineReducers({  notes: notesReducer,  auth: authReducer})
+const store = createStore(reducer);
+
+console.log(store.getState())
+
+const Notenav = (props) => {
     return (
     <div className='nav'>
         <ul>
             <li><Link to='/'>Home</Link></li>
             <li><Link to='/notes'>Notebooks</Link></li>
-            <li><Link to='/sign-in'>Sign in</Link></li>
+	    { props.user != null ? 
+               <li>Sign out</li> :
+               <li><Link to='/sign-in'>Sign in</Link></li>
+	    }
         </ul>
     </div>
     );
@@ -20,10 +32,14 @@ const Notenav = () => {
 
 
 function App() {
+  
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [user, setUser] = useState(null);
+
   return (
     <div className="App">
 	<Router>
-	   <Notenav />
+	   <Notenav user={user} />
 	   <Switch>
 	       <Route exact path='/'>
 	           <Home />
