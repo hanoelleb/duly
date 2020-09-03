@@ -7,7 +7,7 @@ const Notes = () => {
     <div>
         <h1>Notes</h1>
 	<ConnectedForm />
-	<NoteList />
+	<ConnectedNoteList />
     </div>
     )
 }
@@ -32,8 +32,33 @@ class NoteForm extends React.Component {
 
     handleSubmit(e) {
 	e.preventDefault();
-	//console.log('PROPS: ' + JSON.stringify(this.props));
+	
+	//TODO: if logged in also save to database with api
+	//otherwise just add to list
 	console.log(this.props.user);
+
+        const data = { topic: this.state.topic, content: this.state.content };
+
+	if (this.props.user) {
+	    const id = this.props.user._id;
+            console.log('ID: ' + id);
+	    const token = this.props.token;
+	    const url = 'http://localhost:5000/'+id+'/notes/add';
+
+	    fetch(url, {
+	        method: 'POST',
+		headers: {
+		   'Authorization': this.props.token,
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'   
+		},
+		body: JSON.stringify(data)
+	    }).then( response => response.json() )
+              .then( data => {
+	          console.log(data.note);
+		  //TODO add note to note list with dispatch
+	      })
+	}
     }
 
     handleClick() {
@@ -82,13 +107,36 @@ class NoteForm extends React.Component {
 }
 
 class NoteList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+	if (this.props.user) {
+	const url = 'http://localhost:5000/' + this.props.user._id + '/notes';
+        console.log(url);
+            fetch(url, {
+	        headers: {
+                   'Authorization': this.props.token,
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+                },
+	    }).then(response => response.json())
+		.then( data => {
+		    var notes = data.notes;
+                    console.log(notes);
+                    //TODO call dispatch and add all of these notes
+                    //notes.forEach
+		});
+	}
+    }
+
     render() {
         return <h2>Your notes!</h2>
     }
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     user: state.auth.user,
     token: state.auth.token,
@@ -98,5 +146,6 @@ const mapStateToProps = (state) => {
 
 //const mapDispatchToProps = {  toggleImportanceOf,}
 const ConnectedForm = connect(mapStateToProps)(NoteForm)
+const ConnectedNoteList = connect(mapStateToProps)(NoteList)
 
 export default Notes;
