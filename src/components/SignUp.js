@@ -64,11 +64,11 @@ const SignUp = () => {
 	    }
         </form>
 	    <p className={styles.formlink}>Already have an account?
-                <Link to='/sign-in'> Sign in!</Link>
+                <Link to='/duly/sign-in'> Sign in!</Link>
             </p>
 	</div>
     )
-    return <Redirect to='/sign-in' />
+    return <Redirect to='/duly/sign-in' />
 }
 
 export default SignUp;

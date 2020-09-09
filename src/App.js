@@ -21,12 +21,12 @@ const Notenav = (props) => {
     <div className={styles.navbar}>
         <ul>
 	    <li className={styles.logo}>Duly</li>
-            <li><Link to='/'>Home</Link></li>
-            <li><Link to='/notes'>Notebooks</Link></li>
+            <li><Link to='/duly/'>Home</Link></li>
+            <li><Link to='/duly/notes'>Notebooks</Link></li>
 	    { user ?
                 <li onClick={()=> dispatch(logout())}>Sign out</li> :
                 <li>
-		    <Link to='/sign-in'>Sign in</Link>
+		    <Link to='/duly/sign-in'>Sign in</Link>
 		</li>
 	    }
         </ul>
@@ -45,19 +45,19 @@ function App() {
 	<Router>
 	   <Notenav />
 	   <Switch>
-	       <Route exact path='/'>
+	       <Route exact path='/duly'>
 	           <Home />
 	       </Route>
 
-	       <Route path='/notes'>
+	       <Route path='/duly/notes'>
                    <Notes />
                </Route>
 
-	       <Route path='/sign-in'>
+	       <Route path='/duly/sign-in'>
                    <SignIn />
                </Route>
 
-	       <Route path='/sign-up'>
+	       <Route path='/duly/sign-up'>
 	           <SignUp />
 	       </Route>
 	   </Switch>

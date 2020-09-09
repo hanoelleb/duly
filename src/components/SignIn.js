@@ -59,11 +59,11 @@ const SignIn = (props) => {
 	    <input type='submit' value='Sign in' />
 	</form>
 	<p className={styles.formlink}>Not a registered user? 
-	    <Link to='/sign-up'> Sign up!</Link></p>
+	    <Link to='/duly/sign-up'> Sign up!</Link></p>
 	</div>
       )
     }
-    return <Redirect to='/notes' />
+    return <Redirect to='/duly/notes' />
 }
 
 export default SignIn;
