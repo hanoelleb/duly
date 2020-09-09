@@ -3,7 +3,7 @@ import {Editor} from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 
-import { addNote } from '../reducers/notes-reducer';
+import { addNote, editNote, removeNote } from '../reducers/notes-reducer';
 
 const Notes = () => {
     return (
@@ -35,16 +35,11 @@ class NoteForm extends React.Component {
 
     handleSubmit(e) {
 	e.preventDefault();
-	
-	//TODO: if logged in also save to database with api
-	//otherwise just add to list
-	console.log(this.props.user);
 
         const data = { topic: this.state.topic, content: this.state.content };
 
 	if (this.props.user) {
 	    const id = this.props.user._id;
-            console.log('ID: ' + id);
 	    const token = this.props.token;
 	    const url = 'http://localhost:5000/'+id+'/notes/add';
 
@@ -60,10 +55,11 @@ class NoteForm extends React.Component {
               .then( data => {
 	          console.log(data.note);
 		  this.props.addNote(data.note);
-		  //TODO add note to note list with dispatch
+	          this.setState({topic: '', content: '', toggle: false});
 	      })
 	} else {
 	    this.props.addNote( data );
+            this.setState({topic: '', content: '', toggle: false});
 	}
     }
 
@@ -131,8 +127,6 @@ class NoteList extends React.Component {
 	    }).then(response => response.json())
 		.then( data => {
 		    var notes = data.notes;
-                    console.log(notes);
-                    //TODO call dispatch and add all of these notes
                     notes.forEach(note => this.props.addNote(note));
 		});
 	}
@@ -140,7 +134,7 @@ class NoteList extends React.Component {
 
     renderNote(note) {
         return (
-             < Note note={note} />
+             < ConnectedNote note={note} />
 	)
     }
 
@@ -161,6 +155,7 @@ class Note extends React.Component {
 	this.handleChange = this.handleChange.bind(this);
         this.handleEditorChange = this.handleEditorChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+	this.handleRemove = this.handleRemove.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
 	this.state = ({topic: '', content: '', toggle: false});
@@ -179,21 +174,40 @@ class Note extends React.Component {
          this.setState( { content: content } );
     }
 
+    handleRemove() {
+	const data = { id : this.props.note.id };  
+	this.props.removeNote(this.props.note);
+        if (this.props.user) {
+	    const id = this.props.user._id;
+            const token = this.props.token;
+            const url = 'http://localhost:5000/'+id+'/notes/remove';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                   'Authorization': this.props.token,
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then( response => response.json())
+	}
+	this.setState({topic: this.props.note.topic,
+                       content: this.props.note.content});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
 
-        //TODO: if logged in also save to database with api
-        //otherwise just add to list
-	console.log(this.props.note.id);
-
         const data = { id: this.props.note.id, 
+		index: this.props.note.index,
 		topic: this.state.topic, 
 	        content: this.state.content };
-        /*
+        
         if (this.props.user) {
             const id = this.props.user._id;
             const token = this.props.token;
-            const url = 'http://localhost:5000/'+id+'/notes/add';
+            const url = 'http://localhost:5000/'+id+'/notes/update';
 
             fetch(url, {
                 method: 'POST',
@@ -205,19 +219,21 @@ class Note extends React.Component {
                 body: JSON.stringify(data)
             }).then( response => response.json() )
               .then( data => {
-                  console.log(data.note);
-                               this.props.addNote(data.note);
-                  //TODO add note to note list with dispatch
+		  data.note.index = this.props.note.index;
+		  this.props.editNote(data.note);
+		  this.setState({toggle: false});
               })
         } else {
-            this.props.addNote( data );
+            this.props.editNote( data );
+            this.setState({toggle: false});
         }
-	*/
     }
 
     handleClick() {
         var val = !this.state.toggle;
-        this.setState({ toggle: val });
+        this.setState({ topic: this.props.note.topic,
+                       content: this.props.note.content, 
+		toggle: val });
     }
 
 
@@ -229,7 +245,9 @@ class Note extends React.Component {
             <button onClick={this.handleClick}>
 		{ this.state.toggle ? 'Cancel' : 'Edit' }
             </button>
-            <button>Delete</button>
+            <button onClick={this.handleRemove}>
+		Delete
+            </button>
 
 	    { this.state.toggle ?
                 <form onSubmit={this.handleSubmit}>
@@ -271,8 +289,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { addNote }
+const mapDispatchToProps = { addNote, editNote, removeNote }
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(NoteForm)
 const ConnectedNoteList = connect(mapStateToProps, mapDispatchToProps)(NoteList)
+const ConnectedNote = connect(mapStateToProps, mapDispatchToProps)(Note)
 
 export default Notes;

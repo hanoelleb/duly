@@ -16,8 +16,16 @@ const notesReducer = (state = initialState, action) => {
     case 'ADD':
       return state.concat(action.data);
     case 'EDIT':
-      return state.slice(0, action.data.index).concat(action.data) + 
-                 state.slice(action.data.index+1);
+      if (action.data.index == 0) {
+	  console.log("here");
+          return ((state.slice(state.length))
+		    .concat(action.data))
+                    .concat(state.slice(1))
+      }
+      return (((state.slice(state.length))
+	         .concat(state.slice(0, action.data.index)))
+	         .concat(action.data))
+		 .concat(state.slice(action.data.index+1));
     case 'REMOVE':
       return state.filter(note => note.index != action.index);
     default: // if none of the above matches, code comes here
