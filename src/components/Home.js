@@ -1,10 +1,12 @@
 import React from 'react';
+import styles from '../notebook.module.css';
 
 const Home = () => {
     return (
-	<div>
-            <h1>Duly</h1>
-	    <p>Welcome! Duly is a place to store all your notes!</p>
+	<div className={styles.home}>
+            <h2>Duly</h2>
+	    <h3>Welcome!</h3>
+	    <p>Duly is a place to store all your notes!</p>
         
 	    <p>Whether just simple reminders for yourself or 
 	    material for group study sessions, Duly can store it all.</p>

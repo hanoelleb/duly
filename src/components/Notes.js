@@ -74,7 +74,8 @@ class NoteForm extends React.Component {
 	if (this.state.toggle) {
 	    return (
             <div>
-                <button onClick={this.handleClick}>Cancel</button>
+                <button className={styles.notebutton} 
+		    onClick={this.handleClick}>Cancel</button>
 
                 <form className={styles.noteform} onSubmit={this.handleSubmit}>
                     <input type='text' placeholder='Topic' name='topic'
@@ -97,14 +98,16 @@ class NoteForm extends React.Component {
                        }}
                        onEditorChange={this.handleEditorChange}
                     />
-		    <input type='submit' value='Add note'></input>
+		    <input className={styles.notebutton} 
+		    type='submit' value='Add note'></input>
                 </form>
             </div>
 	    )
 	}
         return (
 	    <div>
-		<button onClick={this.handleClick}>+Note</button>
+		<button className={styles.notebutton} 
+		onClick={this.handleClick}>+Note</button>
             </div>
 	)
     }
@@ -244,12 +247,15 @@ class Note extends React.Component {
         <div className={styles.note}>
             <h3>{this.props.note.topic}</h3>
             {ReactHtmlParser(this.props.note.content)}
+	
+            <div className={styles.buttons}>
             <button onClick={this.handleClick}>
 		{ this.state.toggle ? 'Cancel' : 'Edit' }
             </button>
             <button onClick={this.handleRemove}>
 		Delete
             </button>
+            </div>
 
 	    { this.state.toggle ?
                 <form onSubmit={this.handleSubmit}>
