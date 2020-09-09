@@ -1,3 +1,5 @@
+import styles from '../notebook.module.css';
+
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 
@@ -27,8 +29,7 @@ const SignIn = (props) => {
             password: password
 	};
         
-	var url = 'http://localhost:5000/sign-in';
-        var real = 'https://hanoelleb-blog-api.herokuapp.com/';
+	var url = 'https://hanoelleb-notebook-api.herokuapp.com/sign-in';
 	const response =
             fetch(url, {
             method: 'POST',
@@ -41,7 +42,6 @@ const SignIn = (props) => {
                 .then( res => {
 		    localStorage.setItem('token', res.token);
 		    dispatch(login(res.user, res.token));
-                    console.log(localStorage.getItem('token'));
                     setRedirect(true);
                 });
     }
@@ -50,7 +50,7 @@ const SignIn = (props) => {
     if (redirect !== true) {
     return (
 	<div>
-        <form onSubmit={handleSubmit}>
+        <form className={styles.authform} onSubmit={handleSubmit}>
 	    <h2>Sign in</h2>
 	    <input type='text' placeholder='Username' name='username' 
 	        value = {username} onChange={handleName} />
@@ -58,8 +58,8 @@ const SignIn = (props) => {
 	        value = {password} onChange={handlePassword} />
 	    <input type='submit' value='Sign in' />
 	</form>
-	<p>Not a registered user?
-	    <Link to='/sign-up'>Sign up!</Link></p>
+	<p className={styles.formlink}>Not a registered user? 
+	    <Link to='/sign-up'> Sign up!</Link></p>
 	</div>
       )
     }

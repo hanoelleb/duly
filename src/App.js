@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
+import styles from './notebook.module.css';
 import './App.css';
+
 import Home from './components/Home.js';
 import SignIn from './components/SignIn.js';
 import Notes from './components/Notes.js';
@@ -16,8 +18,9 @@ const Notenav = (props) => {
     const dispatch = useDispatch()
 
     return (
-    <div className='nav'>
+    <div className={styles.navbar}>
         <ul>
+	    <li className={styles.logo}>Duly</li>
             <li><Link to='/'>Home</Link></li>
             <li><Link to='/notes'>Notebooks</Link></li>
 	    { user ?
@@ -38,7 +41,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   return (
-    <div className="App">
+    <div>
 	<Router>
 	   <Notenav />
 	   <Switch>

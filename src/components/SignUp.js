@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import styles from '../notebook.module.css';
 
 import {Link, Redirect} from 'react-router-dom';
 
@@ -12,18 +13,16 @@ const SignUp = () => {
 
     function handleName(e) {
         setUsername(e.target.value);
-        console.log(username);
     }
 
     function handlePassword(e) {
-        console.log(e.target.value);
         setPassword(e.target.value);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        var url = 'http://localhost:5000/sign-up';
+        var url = 'https://hanoelleb-notebook-api.herokuapp.com/sign-up';
 
         var data = { username: username, password: password };
 	console.log('data: ' + data);
@@ -48,7 +47,7 @@ const SignUp = () => {
     if (!redirect)
     return (
 	<div>
-        <form onSubmit={handleSubmit}>
+        <form className={styles.authform} onSubmit={handleSubmit}>
             <h2>Sign up</h2>
             <input type='text' placeholder='Username' name='username'
                 value = {username} onChange={handleName} />
@@ -63,10 +62,10 @@ const SignUp = () => {
 		  :
 		  <input type='submit' value='Sign up' disabled />
 	    }
-	    <p>Already have an account? 
-	        <Link to='/sign-in'>Sign in!</Link>
-	    </p>
         </form>
+	    <p className={styles.formlink}>Already have an account?
+                <Link to='/sign-in'> Sign in!</Link>
+            </p>
 	</div>
     )
     return <Redirect to='/sign-in' />

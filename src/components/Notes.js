@@ -1,3 +1,5 @@
+import styles from '../notebook.module.css';
+
 import React, {useState} from 'react';
 import {Editor} from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
@@ -8,7 +10,7 @@ import { addNote, editNote, removeNote } from '../reducers/notes-reducer';
 const Notes = () => {
     return (
     <div>
-        <h1>Notes</h1>
+        <h2>Notes</h2>
 	<ConnectedForm />
 	<ConnectedNoteList />
     </div>
@@ -41,7 +43,7 @@ class NoteForm extends React.Component {
 	if (this.props.user) {
 	    const id = this.props.user._id;
 	    const token = this.props.token;
-	    const url = 'http://localhost:5000/'+id+'/notes/add';
+	    const url = 'https://hanoelleb-notebook-api.herokuapp.com/'+id+'/notes/add';
 
 	    fetch(url, {
 	        method: 'POST',
@@ -74,7 +76,7 @@ class NoteForm extends React.Component {
             <div>
                 <button onClick={this.handleClick}>Cancel</button>
 
-                <form onSubmit={this.handleSubmit}>
+                <form className={styles.noteform} onSubmit={this.handleSubmit}>
                     <input type='text' placeholder='Topic' name='topic'
                         value={this.state.topic} onChange={this.handleChange}
                     />
@@ -116,7 +118,7 @@ class NoteList extends React.Component {
 
     componentDidMount() {
 	if (this.props.user) {
-	const url = 'http://localhost:5000/' + this.props.user._id + '/notes';
+	const url = 'https://hanoelleb-notebook-api.herokuapp.com/' + this.props.user._id + '/notes';
         console.log(url);
             fetch(url, {
 	        headers: {
@@ -140,7 +142,7 @@ class NoteList extends React.Component {
 
     render() {
         return (
-	    <div>
+	    <div className={styles.notelist}>
                 <h2>Your notes!</h2>
 	        {this.props.notes.map(note => this.renderNote(note) ) }
             </div>
@@ -180,7 +182,7 @@ class Note extends React.Component {
         if (this.props.user) {
 	    const id = this.props.user._id;
             const token = this.props.token;
-            const url = 'http://localhost:5000/'+id+'/notes/remove';
+            const url = 'https://hanoelleb-notebook-api.herokuapp.com/'+id+'/notes/remove';
 
             fetch(url, {
                 method: 'POST',
@@ -207,7 +209,7 @@ class Note extends React.Component {
         if (this.props.user) {
             const id = this.props.user._id;
             const token = this.props.token;
-            const url = 'http://localhost:5000/'+id+'/notes/update';
+            const url = 'https://hanoelleb-notebook-api.herokuapp.com/'+id+'/notes/update';
 
             fetch(url, {
                 method: 'POST',
@@ -239,7 +241,7 @@ class Note extends React.Component {
 
     render() { 
         return (
-        <div>
+        <div className={styles.note}>
             <h3>{this.props.note.topic}</h3>
             {ReactHtmlParser(this.props.note.content)}
             <button onClick={this.handleClick}>

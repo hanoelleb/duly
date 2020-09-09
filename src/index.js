@@ -13,9 +13,6 @@ import authReducer from './reducers/auth-reducer';
 const reducer = combineReducers({  notes: notesReducer,  auth: authReducer})
 const store = createStore(reducer);
 
-console.log(store);
-store.subscribe(() => console.log(store.getState()));
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

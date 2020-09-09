@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Lekton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.navbar {
+    font-family: 'Pacifico';
+    border-bottom: 1px solid white;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white
+}
+
+.navbar a:hover {
+    color: peachpuff;
+}
+
+.logo {
+    align-self: left;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.navbar li {
+    margin-right: 5vw;
+}
+
+.note {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-family: 'Lekton';
+    background-color: white;
+    color: black;
+    width: 60vw;
+    padding: 10px;
+}
+
+.notelist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.authform {
+    margin: 20px;
+    padding: 0px 10px 10px 10px;
+    border-radius: 5px;
+    background-color: white;
+    width: 40vw;
+    color: black;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+    text-align: center;
+}
+
+.authform input { 
+    margin-bottom: 10px;
+}
+
+.formlink {
+    text-align: center
+}
+
+.formlink a {
+    text-decoration: none;
+    color: white;
+}
+
+.formlink a:hover {
+    color: peachpuff;
+}
+
+h1, h2 {
+   font-family: 'Pacifico';
+}
