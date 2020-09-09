@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {Editor} from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
+import ReactHtmlParser from 'react-html-parser';
+
+import { addNote } from '../reducers/notes-reducer';
 
 const Notes = () => {
     return (
@@ -56,8 +59,11 @@ class NoteForm extends React.Component {
 	    }).then( response => response.json() )
               .then( data => {
 	          console.log(data.note);
+		  this.props.addNote(data.note);
 		  //TODO add note to note list with dispatch
 	      })
+	} else {
+	    this.props.addNote( data );
 	}
     }
 
@@ -109,6 +115,7 @@ class NoteForm extends React.Component {
 class NoteList extends React.Component {
     constructor(props) {
         super(props);
+	this.renderNote = this.renderNote.bind(this);
     }
 
     componentDidMount() {
@@ -126,13 +133,133 @@ class NoteList extends React.Component {
 		    var notes = data.notes;
                     console.log(notes);
                     //TODO call dispatch and add all of these notes
-                    //notes.forEach
+                    notes.forEach(note => this.props.addNote(note));
 		});
 	}
     }
 
+    renderNote(note) {
+        return (
+             < Note note={note} />
+	)
+    }
+
     render() {
-        return <h2>Your notes!</h2>
+        return (
+	    <div>
+                <h2>Your notes!</h2>
+	        {this.props.notes.map(note => this.renderNote(note) ) }
+            </div>
+	)
+    }
+}
+
+class Note extends React.Component {
+   
+    constructor(props) {
+        super(props);
+	this.handleChange = this.handleChange.bind(this);
+        this.handleEditorChange = this.handleEditorChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+
+	this.state = ({topic: '', content: '', toggle: false});
+    }
+
+    componentDidMount() {
+        this.setState({topic: this.props.note.topic, 
+		content: this.props.note.content});
+    }
+    
+    handleChange(e) {
+        this.setState({ [e.target.name] : e.target.value });
+    }
+
+    handleEditorChange = (content, editor) => {
+         this.setState( { content: content } );
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        //TODO: if logged in also save to database with api
+        //otherwise just add to list
+	console.log(this.props.note.id);
+
+        const data = { id: this.props.note.id, 
+		topic: this.state.topic, 
+	        content: this.state.content };
+        /*
+        if (this.props.user) {
+            const id = this.props.user._id;
+            const token = this.props.token;
+            const url = 'http://localhost:5000/'+id+'/notes/add';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                   'Authorization': this.props.token,
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then( response => response.json() )
+              .then( data => {
+                  console.log(data.note);
+                               this.props.addNote(data.note);
+                  //TODO add note to note list with dispatch
+              })
+        } else {
+            this.props.addNote( data );
+        }
+	*/
+    }
+
+    handleClick() {
+        var val = !this.state.toggle;
+        this.setState({ toggle: val });
+    }
+
+
+    render() { 
+        return (
+        <div>
+            <h3>{this.props.note.topic}</h3>
+            {ReactHtmlParser(this.props.note.content)}
+            <button onClick={this.handleClick}>
+		{ this.state.toggle ? 'Cancel' : 'Edit' }
+            </button>
+            <button>Delete</button>
+
+	    { this.state.toggle ?
+                <form onSubmit={this.handleSubmit}>
+                    <input type='text' placeholder='Topic' name='topic'
+                        value={this.state.topic} onChange={this.handleChange}
+                    />
+                    <Editor name='content'
+                        initialValue="<p>Your notes...</p>"
+                        value = {this.state.content}
+                        init={{
+                            height: 250,
+                            width: 500,
+                            menubar: false,
+                            plugins: [
+             'advlist autolink lists link image charmap print preview anchor',
+             'searchreplace visualblocks code fullscreen',
+             'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar:
+                      'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+                       }}
+                       onEditorChange={this.handleEditorChange}
+                    />
+                    <input type='submit' value='Update'></input>
+                </form>
+
+                : ''
+	    }
+        </div>
+        )
     }
 }
 
@@ -144,8 +271,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-//const mapDispatchToProps = {  toggleImportanceOf,}
-const ConnectedForm = connect(mapStateToProps)(NoteForm)
-const ConnectedNoteList = connect(mapStateToProps)(NoteList)
+const mapDispatchToProps = { addNote }
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(NoteForm)
+const ConnectedNoteList = connect(mapStateToProps, mapDispatchToProps)(NoteList)
 
 export default Notes;
